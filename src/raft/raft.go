@@ -20,13 +20,15 @@ package raft
 import (
 	"bytes"
 	"fmt"
-	"labgob"
-	"labrpc"
 	"log"
 	"math/rand"
 	"sync"
 	"sync/atomic"
 	"time"
+
+	"github.com/yeefea/6.824-golabs-2020/labrpc"
+
+	"github.com/yeefea/6.824-golabs-2020/labgob"
 )
 
 func init() {
@@ -50,7 +52,6 @@ const (
 	Leader    Role = 2
 )
 
-//
 // as each Raft peer becomes aware that successive log entries are
 // committed, the peer should send an ApplyMsg to the service (or
 // tester) on the same server, via the applyCh passed to Make(). set
@@ -60,7 +61,6 @@ const (
 // in Lab 3 you'll want to send other kinds of messages (e.g.,
 // snapshots) on the applyCh; at that point you can add fields to
 // ApplyMsg, but set CommandValid to false for these other uses.
-//
 type ApplyMsg struct {
 	CommandValid bool
 	CommandIndex int
@@ -73,9 +73,7 @@ type LogEntry struct {
 	Command interface{}
 }
 
-//
 // A Go object implementing a single Raft peer.
-//
 type Raft struct {
 	mu        sync.Mutex          // lock to protect shared access to this peer's state
 	peers     []*labrpc.ClientEnd // RPC end points of all peers
@@ -134,19 +132,15 @@ func (rf *Raft) getPersistData() []byte {
 	return data
 }
 
-//
 // save Raft's persistent state to stable storage,
 // where it can later be retrieved after a crash and restart.
 // see paper's Figure 2 for a description of what should be persistent.
-//
 func (rf *Raft) persist() {
 	data := rf.getPersistData()
 	rf.persister.SaveRaftState(data)
 }
 
-//
 // restore previously persisted state.
-//
 func (rf *Raft) readPersist(data []byte) {
 	if data == nil || len(data) < 1 { // bootstrap without any state?
 		return
@@ -223,7 +217,6 @@ func (rf *Raft) lastLogTermIndex() (int, int) {
 	return term, index
 }
 
-//
 // the service using Raft (e.g. a k/v server) wants to start
 // agreement on the next command to be appended to Raft's log. if this
 // server isn't the leader, returns false. otherwise start the
@@ -236,7 +229,6 @@ func (rf *Raft) lastLogTermIndex() (int, int) {
 // if it's ever committed. the second return value is the current
 // term. the third return value is true if this server believes it is
 // the leader.
-//
 func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	// Your code here (2B).
 	rf.lock("start")
@@ -259,7 +251,6 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 	return index, term, isLeader
 }
 
-//
 // the tester calls Kill() when a Raft instance won't
 // be needed again. for your convenience, we supply
 // code to set rf.dead (without needing a lock),
@@ -268,7 +259,6 @@ func (rf *Raft) Start(command interface{}) (int, int, bool) {
 // code to Kill(). you're not required to do anything
 // about this, but it may be convenient (for example)
 // to suppress debug output from a Kill()ed instance.
-//
 func (rf *Raft) Kill() {
 	atomic.StoreInt32(&rf.dead, 1)
 	// Your code here, if desired.
@@ -348,7 +338,6 @@ func randElectionTimeout() time.Duration {
 	return ElectionTimeout + r
 }
 
-//
 // the service or tester wants to create a Raft server. the ports
 // of all the Raft servers (including this one) are in peers[]. this
 // server's port is peers[me]. all the servers' peers[] arrays
@@ -358,7 +347,6 @@ func randElectionTimeout() time.Duration {
 // tester or service expects Raft to send ApplyMsg messages.
 // Make() must return quickly, so it should start goroutines
 // for any long-running work.
-//
 func Make(peers []*labrpc.ClientEnd, me int, persister *Persister, applyCh chan ApplyMsg, gid ...int) *Raft {
 	rf := &Raft{}
 	rf.peers = peers

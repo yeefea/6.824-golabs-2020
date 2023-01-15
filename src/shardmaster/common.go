@@ -1,6 +1,6 @@
 package shardmaster
 
-import "labgob"
+import "github.com/yeefea/6.824-golabs-2020/labgob"
 
 //
 // Master shard server: assigns shards to replication groups.

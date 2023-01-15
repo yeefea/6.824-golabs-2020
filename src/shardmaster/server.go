@@ -2,13 +2,14 @@ package shardmaster
 
 import (
 	"fmt"
-	"labgob"
-	"labrpc"
 	"log"
-	"raft"
 	"sort"
 	"sync"
 	"time"
+
+	"github.com/yeefea/6.824-golabs-2020/labgob"
+	"github.com/yeefea/6.824-golabs-2020/labrpc"
+	"github.com/yeefea/6.824-golabs-2020/raft"
 )
 
 const WaitCmdTimeOut = time.Millisecond * 500
@@ -335,12 +336,10 @@ func (sm *ShardMaster) waitCmd(op Op) (res NotifyMsg) {
 	}
 }
 
-//
 // the tester calls Kill() when a ShardMaster instance won't
 // be needed again. you are not required to do anything
 // in Kill(), but it might be convenient to (for example)
 // turn off debug output from this instance.
-//
 func (sm *ShardMaster) Kill() {
 	sm.rf.Kill()
 	close(sm.stopCh)
@@ -411,12 +410,10 @@ func (sm *ShardMaster) isRepeated(clientId int64, id msgId) bool {
 	return false
 }
 
-//
 // servers[] contains the ports of the set of
 // servers that will cooperate via Paxos to
 // form the fault-tolerant shardmaster service.
 // me is the index of the current server in servers[].
-//
 func StartServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persister) *ShardMaster {
 	labgob.Register(Op{})
 

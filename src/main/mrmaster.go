@@ -9,10 +9,13 @@ package main
 // Please do not change this file.
 //
 
-import "../mr"
-import "time"
-import "os"
-import "fmt"
+import (
+	"fmt"
+	"os"
+	"time"
+
+	"github.com/yeefea/6.824-golabs-2020/mr"
+)
 
 func main() {
 	if len(os.Args) < 2 {

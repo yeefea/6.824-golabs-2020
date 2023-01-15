@@ -2,8 +2,9 @@ package shardkv
 
 import (
 	"fmt"
-	"shardmaster"
 	"time"
+
+	"github.com/yeefea/6.824-golabs-2020/shardmaster"
 )
 
 func (kv *ShardKV) FetchShardData(args *FetchShardDataArgs, reply *FetchShardDataReply) {
